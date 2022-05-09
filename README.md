@@ -1,4 +1,4 @@
-# Pirulino
+# CGEngine
 A simple graphics engine in Javascript
 
 # TODO  
