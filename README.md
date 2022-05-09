@@ -8,13 +8,13 @@ Rotation manager
 
 Moving Camera
 
-Lighting
+Lighting: flat illumination model, phong reflection model with phong shading
 
 Textures
 
-Meshes
+Meshes: to do an obj file parser
 
-Keyboard input
+Keyboard input: to do
 
 # Execute
 
