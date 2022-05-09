@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0efbcc16-18ec-4beb-abce-e02593c8ffc6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/Pirulino.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/libs/glMatrix/dist/esm/common.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/libs/glMatrix/dist/esm/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/libs/glMatrix/dist/esm/mat2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/libs/glMatrix/dist/esm/mat2d.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/libs/glMatrix/dist/esm/mat3.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/libs/glMatrix/dist/esm/mat4.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/libs/glMatrix/dist/esm/quat.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/libs/glMatrix/dist/esm/quat2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/libs/glMatrix/dist/esm/vec2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/libs/glMatrix/dist/esm/vec3.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/libs/glMatrix/dist/esm/vec4.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/libs/glMatrix/dist/gl-matrix-min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/libs/glMatrix/dist/gl-matrix.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/shader.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/shaderSources.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/support/camera.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/support/engine/light.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/support/engine/material.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/support/engine/render.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/support/engine/scene.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/support/engine/shape.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/support/engine/webgl-debug.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/support/input.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/support/shapeCone.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/support/shapeCube.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/support/utilsShapes.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/support/weuifhpoqwihfiowe.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="28kk0Ntze8o3O7hcYcugNMzyBVM" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/Kiwi/Documents/Webstorm/CGEngine",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Kiwi\Documents\Webstorm\Pirulino\common\utils\engine" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0efbcc16-18ec-4beb-abce-e02593c8ffc6" name="Changes" comment="" />
+      <created>1651767747241</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1651767747241</updated>
+      <workItem from="1651767754364" duration="3613000" />
+      <workItem from="1651788124396" duration="504000" />
+      <workItem from="1651826976747" duration="9211000" />
+      <workItem from="1651860198513" duration="4787000" />
+      <workItem from="1651922079656" duration="6153000" />
+      <workItem from="1651970351001" duration="6357000" />
+      <workItem from="1652007125191" duration="23999000" />
+      <workItem from="1652052616712" duration="4731000" />
+      <workItem from="1652096631559" duration="853000" />
+      <workItem from="1652097536057" duration="588000" />
+      <workItem from="1652099157224" duration="351000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
