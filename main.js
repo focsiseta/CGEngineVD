@@ -32,8 +32,11 @@ function createScene(){
 }
 
 yo = createScene()
+inputHandler = new Input()
 function drawScene(){
-    yo.element.rotateY(0.05)
+    //yo.element.rotateY(0.05)
+    cumera.processInput(inputHandler)
+    //console.log(inputHandler.getKeyStatus('e'))
     //cumera.rotateZ(0.01)
     //cumera.rotateX(0.001)
     render.setUniform('viewMatrix',cumera.getViewMatrix())
