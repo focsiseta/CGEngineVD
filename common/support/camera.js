@@ -51,10 +51,10 @@ class Camera extends sceneElement{
                 var px = this.transformationMatrix[8]
                 var py = this.transformationMatrix[9]
                 var pz = this.transformationMatrix[10]
-                px += 0.001 * 0.005
-                py += 0.001 * 0.005
-                pz += 0.001 * 0.005
-                this.translate([-px,-py,-pz])
+                px +=  gradToRad(1) * 0.000003
+                py += gradToRad(1) * 0.0000003
+                pz += gradToRad(1) * 0.0000003
+                this.translate([gradToRad(-px * 2),gradToRad(-py  * 2) ,gradToRad(-pz  * 2)])
 
         }
         if(inputHandler.getKeyStatus('s') === true) {
@@ -62,10 +62,10 @@ class Camera extends sceneElement{
             var px = this.transformationMatrix[8]
             var py = this.transformationMatrix[9]
             var pz = this.transformationMatrix[10]
-            px += 0.001 * 0.005
-            py += 0.001 * 0.005
-            pz += 0.001 * 0.005
-            this.translate([px,py,pz])
+            px += 0.001 * 0.005 * 0.0005
+            py += 0.001 * 0.005* 0.0005
+            pz += 0.001 * 0.005 * 0.0005
+            this.translate([gradToRad(px * 2),gradToRad(py  * 2) ,gradToRad(pz  * 2)])
         }
         if(inputHandler.getKeyStatus('u') === true){
             this.translate([0,0.05,0])
@@ -79,8 +79,7 @@ class Camera extends sceneElement{
             var pz = this.transformationMatrix[10]
             var cross = glMatrix.vec3.create()
             glMatrix.vec3.cross(cross,[px,py,pz],[0,1,0])
-
-            this.translate([cross[0] * 0.5,cross[1]* 0.5,cross[2] * 0.5])
+            this.translate([gradToRad(cross[0] * 2),gradToRad(cross[1]* 2),gradToRad(cross[2] * 2)])
         }
         if(inputHandler.getKeyStatus('d') === true){
 
@@ -90,27 +89,27 @@ class Camera extends sceneElement{
             var cross = glMatrix.vec3.create()
             // -1 because cross product hand rule
             glMatrix.vec3.cross(cross,[px,py,pz],[0,-1,0])
-            this.translate([cross[0] * 0.5,cross[1]* 0.5,cross[2] * 0.5])
+            this.translate([gradToRad(cross[0] * 2),gradToRad(cross[1]* 2),gradToRad(cross[2] * 2)])
 
         }
         if(inputHandler.getKeyStatus('i') === true){
-            this.rotateX(-0.05)
+            this.rotateX(gradToRad(1))
         }
         if(inputHandler.getKeyStatus('k') === true){
-            this.rotateX(0.05)
+            this.rotateX(gradToRad(-1))
         }
         if(inputHandler.getKeyStatus('l') === true){
-            this.rotateY(-0.05)
+            this.rotateY(gradToRad(-1))
         }
         if(inputHandler.getKeyStatus('j') === true){
-            this.rotateY(0.05)
+            this.rotateY(gradToRad(1))
         }
         if(inputHandler.getKeyStatus('n') === true){
-            this.rotateZ(0.05)
+            this.rotateZ(gradToRad(1))
         }
 
         if(inputHandler.getKeyStatus('m') === true){
-            this.rotateZ(-0.05)
+            this.rotateZ(gradToRad(-1))
         }
 
         if(inputHandler.getKeyStatus('p') === true){
