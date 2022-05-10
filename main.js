@@ -15,20 +15,22 @@ function setup(){
     return c
 }
 function createScene(){
-    var cube = render.drawableFactory("cubo",piros,supercube)
-    //var cylinder = render.drawableFactory("cuboCont",[1,0,0],theCylinder10)
-    var node = new sceneNode(cube,[])
-    //var node2 = new sceneNode(cylinder,[])
-    cube.translate([2.0,0.0,0.0])
-    //cube.rotateX(-3.14/2)
-    //Il pattern e' del tipo
-    /*
-    * creo la struttura di gerarchia
-    * istanzio la roba in gpu
-    * transformazioni
-    * calcolo matrici
-    */
-    return node
+    mamma = new sceneElement("mamma")
+    var mammaNode = new sceneNode(mamma,[])
+
+    var crate = render.drawableFactory("crate",piros,shapeCrate)
+    var cube = render.drawableFactory("cube",piros,shapeCube)
+    cube.scale([0.01,0.01,0.01])
+    cube.translate([-1,-1,0])
+
+    var node = new sceneNode(crate,[])
+    crate.translate([2.0,0.0,0.0])
+
+    var node2 = new sceneNode(cube, [])
+    mammaNode.addFiglio(node)
+    mammaNode.addFiglio(node2)
+
+    return mammaNode
 }
 
 yo = createScene()

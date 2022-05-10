@@ -4,13 +4,14 @@ class Shape{
         this.drawingType = "TRIANGLES"
         this.vertices = new Float32Array(vertexArray)
         this.indices = new Uint16Array(indexArray)
-        this.normals = normalArray == null ? ComputeNormals(this.vertices,this.indices) : normalArray
+        this.normals = normalArray == null ? ComputeNormals(this.vertices,this.indices) : new Float32Array(normalArray)
     }
 
 
 }
 
 const cylinder20 = new Shape(cyVertexGen(20),cyIndexGen(20))
+
 const supercube = new Shape([
     -1.0, -1.0, 1.0,
     1.0, -1.0, 1.0,
