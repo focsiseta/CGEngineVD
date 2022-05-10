@@ -20,15 +20,19 @@ function createScene(){
 
     var crate = render.drawableFactory("crate",piros,shapeCrate)
     var cube = render.drawableFactory("cube",piros,shapeCube)
-    cube.scale([0.01,0.01,0.01])
-    cube.translate([-1,-1,0])
+    var knife = render.drawableFactory("knife", piros, shapeKnife)
+    cube.translate([0,2,0])
 
     var node = new sceneNode(crate,[])
-    crate.translate([2.0,0.0,0.0])
+    crate.translate([0.0,-2.0,0.0])
+
+    knife.scale([2,2,2])
 
     var node2 = new sceneNode(cube, [])
+    var node3 = new sceneNode(knife, [])
     mammaNode.addFiglio(node)
     mammaNode.addFiglio(node2)
+    mammaNode.addFiglio(node3)
 
     return mammaNode
 }
@@ -36,7 +40,7 @@ function createScene(){
 yo = createScene()
 inputHandler = new Input()
 function drawScene(){
-    //yo.element.rotateY(0.05)
+    yo.element.rotateY(0.03)
     cumera.processInput(inputHandler)
     //console.log(inputHandler.getKeyStatus('e'))
     //cumera.rotateZ(0.01)
