@@ -6,15 +6,19 @@ Recalc of matrixes for scene : Done
 
 Rotation manager
 
-Moving Camera
+Moving Camera : Done
 
-Lighting: flat illumination model, phong reflection model with phong shading
+Lighting: flat illumination model and phong reflection model with phong shading are done
+
+Dynamic creation and assembly of shaders
 
 Textures
 
-Meshes: to do an obj file parser
+Meshes: They work, we just need to convert them in JSON
 
-Keyboard input: to do
+Keyboard input: Done
+
+Mouse Input 
 
 # Execute
 
