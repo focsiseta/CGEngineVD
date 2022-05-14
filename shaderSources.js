@@ -92,20 +92,19 @@ const fsPhongSource = `
     uniform vec3 uEyePosition;
     
     void main(void){
+        vec3 normal= normalize(vNormal);
         float lightDiffuseInt = 1.0; //Light intensity 
-        float lightAmbientInt = 0.5; //Light Ambient intensity
-        vec3 lightDir = vec3(0.0,0.0,1.0);//Needs to be a uniform
-        vec3 lightColor = vec3(1.0,1.0,1.0);
+        float lightAmbientInt = 0.3; //Light Ambient intensity
+        vec3 lightDir = normalize(vec3(0.0,1.0,0.0));//Needs to be a uniform
+        vec3 lightColor = vec3(1,1,1);
         
-        /*Uniforms*/
-        //vec3 eyePosition = vec3(0.0,0.0,1.0); //eyePosition uniform
-        /*~~~~~~~~~*/
+        
         
         vec3 ambientColor = ((lightColor * lightAmbientInt) * uMatAmbientColor);
-        vec3 diffuseColor = ((lightColor * lightDiffuseInt) * uMatDiffuseColor) * dot(vNormal,lightDir);
-        vec3 H = normalize((-lightDir)+uEyePosition); //Nessun doppio dot product come i chad
-        vec3 specularColor = pow(dot(H,vNormal),1.) * uMatSpecularColor * lightColor;
-        gl_FragColor = vec4((specularColor).xyz,1.0);
+        vec3 diffuseColor = ((lightColor * lightDiffuseInt) * uMatDiffuseColor) * max(0.0,dot(normal,lightDir));
+        vec3 H = normalize((lightDir) + normalize(uEyePosition)); //Nessun doppio dot product come i chad
+        vec3 specularColor = pow(max ( 0.0, dot(H,normal)) ,50.) * uMatSpecularColor * lightColor;
+        gl_FragColor = vec4((ambientColor+specularColor+diffuseColor).xyz,1.0);   
     }
 `
 

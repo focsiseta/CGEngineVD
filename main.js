@@ -34,6 +34,7 @@ function createScene(){
     var crate = new Drawable(shaders.getContext(),"crate",piros, shapeCrate)
     var cube = new Drawable(shaders.getContext(), "cube", piros, shapeCube)
     var knife = new Drawable(shaders.getContext(),"knife", piros, shapeKnife)
+    var sphere = new Drawable(shaders.getContext(),"sphere", piros, shapeSphere)
 
 
     cube.translate([0,2,0])
@@ -41,13 +42,19 @@ function createScene(){
     var node = new sceneNode(crate,[])
     crate.translate([0.0,-2.0,0.0])
 
+    sphere.translate([-2,0,0])
+    sphere.scale([.5,.5,.5])
+
     knife.scale([2,2,2])
 
     var node2 = new sceneNode(cube, [])
     var node3 = new sceneNode(knife, [])
+    var node4 = new sceneNode(sphere,[])
+
     mammaNode.addFiglio(node)
     mammaNode.addFiglio(node2)
     mammaNode.addFiglio(node3)
+    mammaNode.addFiglio(node4)
 
     return mammaNode
 }
