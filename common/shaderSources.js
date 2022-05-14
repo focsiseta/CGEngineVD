@@ -89,23 +89,27 @@ const fsPhongSource = `
     uniform vec3 uMatDiffuseColor;  //Colore quando oggetto viene illuminato
     uniform vec3 uMatAmbientColor;  //Colore del materiale in scarsa luminosita'
     uniform vec3 uMatSpecularColor; //Colore della riflessione della luce riflessa dall'oggetto
+    uniform vec3 uEyePosition;
+    
     void main(void){
         float lightDiffuseInt = 1.0; //Light intensity 
         float lightAmbientInt = 0.5; //Light Ambient intensity
-        vec3 lightDir = vec3(0.0,1.0,0.0);//Needs to be a uniform
+        vec3 lightDir = vec3(0.0,0.0,1.0);//Needs to be a uniform
         vec3 lightColor = vec3(1.0,1.0,1.0);
+        
         /*Uniforms*/
-        vec3 eyePosition = vec3(0.0,0.0,1.0); //eyePosition uniform
+        //vec3 eyePosition = vec3(0.0,0.0,1.0); //eyePosition uniform
         /*~~~~~~~~~*/
+        
         vec3 ambientColor = ((lightColor * lightAmbientInt) * uMatAmbientColor);
         vec3 diffuseColor = ((lightColor * lightDiffuseInt) * uMatDiffuseColor) * dot(vNormal,lightDir);
-        vec3 H = normalize((-lightDir)+eyePosition); //Nessun doppio dot product come i chad
-        vec3 specularColor = pow(dot(H,vNormal),2.) * uMatSpecularColor * lightColor;
-        gl_FragColor = vec4((diffuseColor+specularColor+ambientColor).xyz,1.0);
+        vec3 H = normalize((-lightDir)+uEyePosition); //Nessun doppio dot product come i chad
+        vec3 specularColor = pow(dot(H,vNormal),1.) * uMatSpecularColor * lightColor;
+        gl_FragColor = vec4((specularColor).xyz,1.0);
     }
 `
 
-const flatSh = new Program(gl,flatVsSource, flatFsSource)
-const BasicShaders = new Program(gl,vsSource, fsSource)
+const flatSh = new Shader(gl,flatVsSource, flatFsSource)
+const BasicShaders = new Shader(gl,vsSource, fsSource)
 //const phongLight = new Program(gl,vsPhongSource,fsPhongSource)
 

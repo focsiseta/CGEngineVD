@@ -1,3 +1,8 @@
+const canvas = document.getElementById("OUT")
+const gl = WebGLDebugUtils.makeDebugContext(canvas.getContext("webgl"))
+gl.getExtension('OES_standard_derivatives')
+
+
 function identity(){
     var F = glMatrix.mat4.create()
     return glMatrix.mat4.identity(F)

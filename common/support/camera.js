@@ -30,8 +30,9 @@ class Camera extends sceneElement{
         glMatrix.mat4.invert(this.viewMatrix,this.getTransformation())
     }
     getCameraPosition(){
-        console.log(this.transformationMatrix[12],this.transformationMatrix[13],this.transformationMatrix[14])
+        return [this.transformationMatrix[12],this.transformationMatrix[13],this.transformationMatrix[14]]
     }
+
     processInput(inputHandler) {
         /*
         il cross product e' invertito perche' per come funziona la telecamera e' il mondo che ci

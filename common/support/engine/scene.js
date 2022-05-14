@@ -59,7 +59,6 @@ class sceneElement {
         glMatrix.mat4.copy(this.fMatrix,frame)
     }
 
-
 }
 
 class sceneNode {
@@ -108,7 +107,7 @@ class sceneNode {
 //se l'elemento non ha la funzione draw (serve solo per immagazzinare le matrici) allora non viene chiamata draw
 
         if(sNode.element.drawObject != null)
-            sNode.element.drawObject(context,shader)
+            sNode.element.drawObject(shader)
 
 
         sNode.figli.forEach((figlio) =>{
@@ -139,13 +138,25 @@ class sceneNode {
 
 class Drawable extends sceneElement{
 
-    constructor(name = "Default_element",material = null,shape = null) {
+    constructor(glContext, name = "Default_element",material = null,shape = null) {
         super(name)
         this.order = 0
         this.shape = shape
         this.material = material
+        this.context = glContext
+        this.createObject()
     }
-    drawObject(context,shader){
+
+    //this method is for keeping normal consistency in the shaders. If we have to draw an object with normals, we also need the inverse transposed transf matrix
+    getInverseTranspose(){
+        let tmp = glMatrix.mat4.create()
+        glMatrix.mat4.transpose(tmp,glMatrix.mat4.invert(tmp,this.getTransformation()))
+        return tmp
+    }
+
+    drawObject(shader){
+        let context = this.context
+
         context.bindBuffer(context.ARRAY_BUFFER,this.vBuffer)
         context.enableVertexAttribArray(shader['aPosition'])
         context.vertexAttribPointer(shader['aPosition'],3,context.FLOAT,false,0,0)
@@ -157,14 +168,8 @@ class Drawable extends sceneElement{
         context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,this.iBuffer)
         context.uniformMatrix4fv(shader['uM'],false,this.getFrame())
 
-        //Per il momento questa non mi sembra una soluzione cosi' terribile
-        //l'alternativa sarebbe quella di fare schifo ngl
-        var inverse = glMatrix.mat4.create()
-        glMatrix.mat4.invert(inverse,this.getTransformation())
-        glMatrix.mat4.transpose(inverse,inverse)
+        context.uniformMatrix4fv(shader['uInvTransGeoMatrix'],false,this.getInverseTranspose())
 
-
-        context.uniformMatrix4fv(shader['uInvTransGeoMatrix'],false,inverse)
         context.uniform3f(shader['uMatDiffuseColor'],...this.material.getDiffuse())
         context.uniform3f(shader['uMatAmbientColor'],...this.material.getAmbient())
         context.uniform3f(shader['uMatSpecularColor'],...this.material.getSpecular())
@@ -175,7 +180,10 @@ class Drawable extends sceneElement{
         context.bindBuffer(context.ARRAY_BUFFER,null)
         context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,null)
     }
-    createObject(context){
+    createObject(){
+
+        let context= this.context
+
         this.vBuffer = context.createBuffer()
         context.bindBuffer(context.ARRAY_BUFFER,this.vBuffer)
         context.bufferData(context.ARRAY_BUFFER,this.shape.vertices,context.STATIC_DRAW)
