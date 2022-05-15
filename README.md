@@ -35,5 +35,7 @@ Just download the repository,unzip it and open index.html in your favourite brow
 # Next features
 
 Multiple lights in scene (it's the most important right now because we are going to use this engine as base for our university project and it requires to have multiple lights)
+
 Dynamic creation and assembly of shaders
+
 Scene editor : Already sketched something on paper, but more research is needed
