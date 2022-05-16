@@ -47,11 +47,12 @@ class Shader {
 
     bindAttribute(id, number) {
         this[id] = number
-        gl.bindAttribLocation(this.program, this[id], id)
+        this.gl.bindAttribLocation(this.program, this[id], id)
     }
 
     bindUniform(id) {
-        this[id] = gl.getUniformLocation(this.program, id)
+        this.uniforms.push(id) //Utilizzato per mettere i nomi degli uniform che non vengono parsati dentro lo shader, guarda sun in fsShaderBase
+        this[id] = this.gl.getUniformLocation(this.program, id)
     }
 
     static parseShaders(vsSource, fsSource) {
@@ -74,8 +75,18 @@ class Shader {
         }
         this.gl.uniform3fv(this[uniformName],data)
     }
+    getUniformValue(uniformName){
+        return this.gl.getUniform(this.program,this[uniformName])
+    }
     useProgram(){
-        this.getContext().useProgram(this.program)
+        this.gl.useProgram(this.program)
+    }
+    setUniform1Float(uniformName,data){
+        if(!this.hasOwnProperty(uniformName)){
+            this.uniLog+=`Error: ${uniformName} does not exist|`
+            return
+        }
+        this.gl.uniform1f(this[uniformName],data)
     }
 
 

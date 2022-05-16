@@ -41,12 +41,11 @@ class Camera extends sceneElement{
         Stesso principio si applica per quando si va avanti o indietro
         Per andare avanti il mondo si sta spostando vicino a noi, mantre tornare indietro il mondo si deve allontanare
 
-        Sottosopra diventa il verso di destra e sinistra viene invertito, cercare di sistemare questo problema con una
+        Sottosopra il verso di destra e sinistra viene invertito, cercare di sistemare questo problema con una
         flag per invertire  vorrebbe dire che dopo una certo angolo di rotazione Z dovremmo cambiare il verso e questo
         puo' non essere sempre la soluzione piu' corretta
         */
         //This gimbals af
-        //w
         if(inputHandler.getKeyStatus('w') === true){
 
                 var px = this.transformationMatrix[8]
@@ -68,7 +67,7 @@ class Camera extends sceneElement{
             pz += 0.001 * 0.005 * 0.0005
             this.translate([gradToRad(px * 2),gradToRad(py  * 2) ,gradToRad(pz  * 2)])
         }
-        if(inputHandler.getKeyStatus('u') === true){
+        if(inputHandler.getKeyStatus('spacebar') === true){
             this.translate([0,0.05,0])
         }
         if(inputHandler.getKeyStatus('h') === true){

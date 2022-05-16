@@ -170,9 +170,9 @@ class Drawable extends sceneElement{
 
         context.uniformMatrix4fv(shader['uInvTransGeoMatrix'],false,this.getInverseTranspose())
 
-        context.uniform3f(shader['uMatDiffuseColor'],...this.material.getDiffuse())
-        context.uniform3f(shader['uMatAmbientColor'],...this.material.getAmbient())
-        context.uniform3f(shader['uMatSpecularColor'],...this.material.getSpecular())
+        shader.setVectorUniform('uMatDiffuseColor',this.material.getDiffuse())
+        shader.setVectorUniform('uMatAmbientColor',this.material.getAmbient())
+        shader.setVectorUniform('uMatSpecularColor',this.material.getSpecular())
 
         context.drawElements(context[this.shape.drawingType],this.shape.indices.length,context.UNSIGNED_SHORT,0)
         context.disableVertexAttribArray(shader['aPosition'])

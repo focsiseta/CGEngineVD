@@ -1,4 +1,4 @@
-const shaders = new Shader(gl,vsPhongSource,fsPhongSource)
+const shaders = new Shader(gl,vsShaderBaseline,fsShaderBase)
 shaders.useProgram()
 //const render = new Render(gl,phongLight)
 //const render2 = new Render(gl,BasicShaders)
@@ -20,7 +20,7 @@ function setup(){
 
 //create and set perspective projection matrix
     var projetionMatrix = glMatrix.mat4.create()
-    glMatrix.mat4.perspective(projetionMatrix,3.14/4,1.0,0.15,150)
+    glMatrix.mat4.perspective(projetionMatrix,3.14/4,1300/720,0.15,150)
     shaders.setMatrixUniform('projMatrix',projetionMatrix)
 
 //return the camera
@@ -28,6 +28,13 @@ function setup(){
 }
 
 function createScene(){
+
+    var directional = new DirectionalLight("Test",0.3,0.0,[0.0,1.0,-1.0],[1,1,1])
+    var directional2 = new DirectionalLight("Test",0.5,0.0,[0.0,1.0,1.0],[1,1,1])
+    var directional3 = new DirectionalLight("Test",0.5,0.0,[1.0,1.0,0.0],[1,1,1])
+
+    DirectionalLight.bindLights(shaders)
+    DirectionalLight.loadLights(shaders)
     mamma = new sceneElement("mamma")
     var mammaNode = new sceneNode(mamma,[])
 
@@ -63,13 +70,15 @@ yo = createScene()
 inputHandler = new Input()
 
 function drawScene(){
-    //yo.element.rotateY(0.03)
-    cumera.processInput(inputHandler)
+    //yo.element.rotateY(0.003)
     //console.log(inputHandler.getKeyStatus('e'))
     //cumera.rotateZ(0.01)
     //cumera.rotateX(0.001)
+    cumera.processInput(inputHandler)
+
     shaders.setMatrixUniform('viewMatrix',cumera.getViewMatrix())
     shaders.setVectorUniform('uEyePosition',cumera.getCameraPosition())
+
 
     yo.calcSceneDraw(shaders.getContext(),shaders)
     window.requestAnimationFrame(drawScene)

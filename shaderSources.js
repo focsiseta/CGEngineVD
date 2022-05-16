@@ -83,6 +83,8 @@ const vsPhongSource = `
 `
 const fsPhongSource = `
     //#extension GL_OES_standard_derivatives : enable
+            #define N_MAX_LIGHT 1024
+
     precision lowp float;
     varying vec3 vPositionW;
     varying vec3 vNormal;
@@ -95,10 +97,15 @@ const fsPhongSource = `
         vec3 normal= normalize(vNormal);
         float lightDiffuseInt = 1.0; //Light intensity 
         float lightAmbientInt = 0.3; //Light Ambient intensity
-        vec3 lightDir = normalize(vec3(0.0,1.0,0.0));//Needs to be a uniform
+        vec3 lightDir = normalize(vec3(0.0,0.0,0.5));//Needs to be a uniform
         vec3 lightColor = vec3(1,1,1);
+        //vec3 viewDir = normalize(uEyePosition - vPositionW); Praticamente la posizione della telecamera uEyePosition
         
-        
+            vec3 normalizedNormal = normalize(normal);
+            vec3 ambientColor = (light.color * light.ambientInt) * uMatAmbientColor;
+            vec3 diffuseColor = ((light.color * light.diffuseInt) * uMatDiffuseColor) * max(0.0,dot(normalizedNormal,light.direction));
+            vec3 H = normalize(-light.direction + normalize(cameraPos));
+            vec3 specularColor = pow(max(0.5,dot(H,normalizedNormal)), 30.)  * uMatSpecularColor * light.color;
         
         vec3 ambientColor = ((lightColor * lightAmbientInt) * uMatAmbientColor);
         vec3 diffuseColor = ((lightColor * lightDiffuseInt) * uMatDiffuseColor) * max(0.0,dot(normal,lightDir));
@@ -107,7 +114,111 @@ const fsPhongSource = `
         gl_FragColor = vec4((ambientColor+specularColor+diffuseColor).xyz,1.0);   
     }
 `
+const vsShaderBaseline  = `
+        //vertex
+        attribute vec3 aPosition;
+        //normals
+        attribute vec3 aNormal;
+        //TODO Texture
+        
+        //viewMatrix
+        uniform mat4 viewMatrix;
+        //Applies transformations and brings aPosition in viewSpace
+        uniform mat4 uM;
+        //projMatrix
+        uniform mat4 projMatrix;
+        //Normal correction matrix
+        uniform mat4 uInvTransGeoMatrix;
+        
+        //Position in world space
+        varying vec3 vPositionW;
+        //exiting normal (which needs to be corrected by uInvTransGeoMatrix)
+        varying vec3 vNormal;
+        
+        void main(void){
+            //Point in world space just in case we need it
+            vPositionW = (viewMatrix * uM * vec4(aPosition,1.0)).xyz;
+            
+            gl_Position = projMatrix * vec4(vPositionW,1.0);
+            
+            //Sending correct normal to fragment shader
+            vNormal = (uInvTransGeoMatrix * vec4(aNormal,1.0)).xyz;
+            
+        }
+        `
 
+
+const fsShaderBase  = `
+        precision highp float;
+        
+        //Position in world space on the object right now (interpolated)
+        varying vec3 vPositionW;
+        
+        //exiting normal (which needs to be corrected by uInvTransGeoMatrix)
+        //Corrected and interpolated normal
+        varying vec3 vNormal;
+        
+        
+        //Camera position
+        uniform vec3 uEyePosition;
+        
+        //How many directional lights
+        uniform float N_DIRLIGHTS;
+        //We can have an offset for deciding which light is going to be rendered
+        
+        struct DirectionalLight{
+            float diffuseInt;
+            float ambientInt;
+            vec3 color;
+            
+            vec3 specular;
+            vec3 ambient;
+            vec3 diffuse;
+            vec3 direction;
+        };
+        
+        /*
+        int N_MAX_LIGHT = 1024;
+        #define N_MAX_LIGHT 1024
+        I can't get them to work gonna try later 
+        TODO
+        */
+        
+        uniform vec3 uMatDiffuseColor;  //Colore quando oggetto viene illuminato
+        uniform vec3 uMatAmbientColor;  //Colore del materiale in scarsa luminosita'
+        uniform vec3 uMatSpecularColor; //Colore della riflessione della luce riflessa dall'oggetto
+        
+        //33
+        //Luke skywalker
+        
+        uniform DirectionalLight sun[10];
+        
+        vec3 CalcDirectionalLight(DirectionalLight light,vec3 cameraPos,vec3 normal){
+            vec3 normalizedNormal = normalize(normal);
+            vec3 ambientColor = (light.color * light.ambientInt) * uMatAmbientColor;
+            vec3 diffuseColor = (light.color * light.diffuseInt) * uMatDiffuseColor * max(0.0,dot(normalizedNormal,light.direction));
+            vec3 H = normalize(-light.direction + normalize(cameraPos));
+            vec3 specularColor = pow(max(0.5,dot(H,normalizedNormal)), 30.)  * uMatSpecularColor * light.color;
+            light.ambient = ambientColor;
+            light.diffuse = diffuseColor;
+            light.specular = specularColor;
+            return vec3(light.ambient + light.specular + light.diffuse);
+        }
+        void main(void){
+            vec3 finalColor = vec3(0.0,0.0,0.0);
+            int counter = int(N_DIRLIGHTS);
+            for(int i = 0; i < 50; i++){
+                if(i > counter){
+                    break;
+                }
+                finalColor += CalcDirectionalLight(sun[i],uEyePosition,vNormal);
+
+            }
+            gl_FragColor = vec4(finalColor,1.0);
+        
+        }
+        
+`
 const flatSh = new Shader(gl,flatVsSource, flatFsSource)
 const BasicShaders = new Shader(gl,vsSource, fsSource)
 //const phongLight = new Program(gl,vsPhongSource,fsPhongSource)
