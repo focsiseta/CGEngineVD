@@ -15,7 +15,7 @@ Meshes now work, but they need to be converted to json first (We use Meshlab to 
 
 Keyboard input is done (check camera.js main.js and input.js to learn more on how to use this) 
 
-
+Multiple directional lights 
 # TODO  
 
 Lighting: Positional light and spotlights
@@ -24,7 +24,7 @@ Textures
 
 Mouse Input 
 
-Multiple lights
+Multiple spotlight and positional lights 
 
 Dynamic creation and assembly of shaders
 
