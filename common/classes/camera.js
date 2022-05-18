@@ -51,9 +51,9 @@ class Camera extends sceneElement{
                 var px = this.transformationMatrix[8]
                 var py = this.transformationMatrix[9]
                 var pz = this.transformationMatrix[10]
-                px +=  gradToRad(1) * 0.000003
-                py += gradToRad(1) * 0.0000003
-                pz += gradToRad(1) * 0.0000003
+                px +=  gradToRad(1) * 0.00003
+                py += gradToRad(1) * 0.000003
+                pz += gradToRad(1) * 0.000003
                 this.translate([gradToRad(-px * 2),gradToRad(-py  * 2) ,gradToRad(-pz  * 2)])
 
         }
@@ -67,7 +67,7 @@ class Camera extends sceneElement{
             pz += 0.001 * 0.005 * 0.0005
             this.translate([gradToRad(px * 2),gradToRad(py  * 2) ,gradToRad(pz  * 2)])
         }
-        if(inputHandler.getKeyStatus('spacebar') === true){
+        if(inputHandler.getKeyStatus('u') === true){
             this.translate([0,0.05,0])
         }
         if(inputHandler.getKeyStatus('h') === true){

@@ -6,7 +6,8 @@ shaders.useProgram()
 function setup(){
 
 //create the camera
-    var c = new Camera([0,0,10],[0,0,0])
+    var c = new Camera([0,-4,10],[0,0,0])
+
 
     //Stupid shit
 
@@ -63,13 +64,35 @@ function createScene(){
     mammaNode.addFiglio(node3)
     mammaNode.addFiglio(node4)
 
+    //mamma.rotateX(Math.PI/2)
+    mamma.translate([3,-5,-10])
+
     return mammaNode
 }
 
 yo = createScene()
 inputHandler = new Input()
 
+var countero = 0
+var flaggo = true
+
 function drawScene(){
+
+
+
+    if(countero >70){
+        countero=0
+        flaggo=!flaggo
+    }
+    if(flaggo){
+        yo.element.rotateY(Math.PI/140)
+    }
+    else
+        yo.element.rotateX(Math.PI/140)
+    countero++
+
+
+
     //yo.element.rotateY(0.003)
     //console.log(inputHandler.getKeyStatus('e'))
     //cumera.rotateZ(0.01)
