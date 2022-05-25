@@ -44,16 +44,17 @@ function createScene(){
     var knife = new Drawable(shaders.getContext(),"knife", piros, shapeKnife)
     var sphere = new Drawable(shaders.getContext(),"sphere", piros, shapeSphere)
 
-
-    cube.translate([0,2,0])
+    crate.scale([1.5,1.5,1.5])
+    cube.scale([1.5,1.5,1.5])
+    cube.translate([0,6,0])
 
     var node = new sceneNode(crate,[])
-    crate.translate([0.0,-2.0,0.0])
+    crate.translate([0.0,-6.0,0.0])
 
-    sphere.translate([-2,0,0])
-    sphere.scale([.5,.5,.5])
+    sphere.translate([-6,0,0])
+    sphere.scale([.75,.75,.75])
 
-    knife.scale([2,2,2])
+    knife.scale([3,3,3])
 
     var node2 = new sceneNode(cube, [])
     var node3 = new sceneNode(knife, [])
@@ -80,7 +81,7 @@ function drawScene(){
 
 
 
-    if(countero >70){
+    /*if(countero >70){
         countero=0
         flaggo=!flaggo
     }
@@ -90,7 +91,7 @@ function drawScene(){
     else
         yo.element.rotateX(Math.PI/140)
     countero++
-
+*/
 
 
     //yo.element.rotateY(0.003)
