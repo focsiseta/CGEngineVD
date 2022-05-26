@@ -2,6 +2,7 @@ class Camera extends sceneElement{
     constructor(position = [0,0,5]) {
         super("Camera_")
         //Position is used only to save the first position of the camera itself, for camera position use getActualPosition
+        this.speed = 0.3
         this.resetPosition = position
 
         //euler rotation (careful about the gimbal lock)
@@ -20,11 +21,13 @@ class Camera extends sceneElement{
     rotateY(angle) {
         this.gimbal.addBeta(angle)
         this.rotationMatrix = this.gimbal.frameCalculation()
+
     }
 
     rotateZ(angle) {
         this.gimbal.addGamma(angle)
         this.rotationMatrix = this.gimbal.frameCalculation()
+
     }
 
 // method for passing the inverted viewFrame to the shader
@@ -69,18 +72,28 @@ class Camera extends sceneElement{
         */
         //This gimbals af
         if(inputHandler.getKeyStatus('w') === true){
-            let tmp = this.getViewMatrix()
-            let vector = [ -1*(tmp[8] + gradToRad(1) * 0.00003) , -1*(tmp[9] + gradToRad(1) * 0.00003) , -1*(tmp[10] + gradToRad(1) * 0.00003)]
+            let tmp = glMatrix.mat4.create()
+            glMatrix.mat4.invert(tmp,this.getViewMatrix())
+            let vector = glMatrix.vec3.fromValues(tmp[8],tmp[9],tmp[10])
+            glMatrix.vec3.scale(vector,vector,-this.speed)
+
+            //let vector = [ -1*(tmp[8] + gradToRad(1) * 0.00003) , -1*(tmp[9] + gradToRad(1) * 0.00003) , -1*(tmp[10] + gradToRad(1) * 0.00003)]
 
             this.translate(vector)
+            /*let tmp = glMatrix.vec3.create()
+            glMatrix.vec3.scale(tmp, this.gimbal.front, -0.3)
+            this.translate(tmp)*/
         }
 
         if(inputHandler.getKeyStatus('s') === true) {
 
-            let tmp = this.getViewMatrix()
-            let vector = [(tmp[8] + gradToRad(1) * 0.00003) , (tmp[9] + gradToRad(1) * 0.00003) , (tmp[10] + gradToRad(1) * 0.00003)]
+            let tmp = glMatrix.mat4.create()
+            glMatrix.mat4.invert(tmp,this.getViewMatrix())
+            let vector = glMatrix.vec3.fromValues(tmp[8],tmp[9],tmp[10])
+            glMatrix.vec3.scale(vector,vector,this.speed)
 
             this.translate(vector)
+
         }
         if(inputHandler.getKeyStatus('u') === true){
             this.translate([0,0.05,0])
@@ -89,22 +102,22 @@ class Camera extends sceneElement{
             this.translate([0,-0.05,0])
         }
         if(inputHandler.getKeyStatus('a') === true){
-            let tmp = this.getViewMatrix()
-            let vector = [tmp[8],tmp[9],tmp[10]]
+            let tmp = glMatrix.mat4.create()
+            glMatrix.mat4.invert(tmp,this.getViewMatrix())
+            let vector = glMatrix.vec3.fromValues(tmp[0],tmp[1],tmp[2])
+            glMatrix.vec3.scale(vector,vector,-this.speed)
 
-            var cross = glMatrix.vec3.create()
-            glMatrix.vec3.cross(cross,vector,[0,1,0])
-            this.translate([gradToRad(cross[0] * 10),gradToRad(cross[1]* 10),gradToRad(cross[2] * 10)])
+            this.translate(vector)
+
         }
         if(inputHandler.getKeyStatus('d') === true){
 
-            let tmp = this.getViewMatrix()
-            let vector = [tmp[8],tmp[9],tmp[10]]
+            let tmp = glMatrix.mat4.create()
+            glMatrix.mat4.invert(tmp,this.getViewMatrix())
+            let vector = glMatrix.vec3.fromValues(tmp[0],tmp[1],tmp[2])
+            glMatrix.vec3.scale(vector,vector,this.speed)
+            this.translate(vector)
 
-            var cross = glMatrix.vec3.create()
-            // -1 because cross product hand rule
-            glMatrix.vec3.cross(cross,vector,[0,-1,0])
-            this.translate([gradToRad(cross[0] * 10),gradToRad(cross[1]* 10),gradToRad(cross[2] * 10)])
 
         }
 
@@ -123,11 +136,11 @@ class Camera extends sceneElement{
             this.rotateY(gradToRad(0.5))
         }
         if(inputHandler.getKeyStatus('n') === true){
-            this.rotateZ(gradToRad(-0.5))
+            this.rotateZ(gradToRad(0.5))
         }
 
         if(inputHandler.getKeyStatus('m') === true){
-            this.rotateZ(gradToRad(0.5))
+            this.rotateZ(gradToRad(-0.5))
         }
 
         if(inputHandler.getKeyStatus('p') === true){

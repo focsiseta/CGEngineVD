@@ -6,7 +6,7 @@ shaders.useProgram()
 function setup(){
 
 //create the camera
-    var c = new Camera([0,-4,10],[0,0,0])
+    var c = new Camera([0,0,10],[0,0,0])
 
 
     //Stupid shit
@@ -66,7 +66,7 @@ function createScene(){
     mammaNode.addFiglio(node4)
 
     //mamma.rotateX(Math.PI/2)
-    mamma.translate([3,-5,-10])
+    mamma.translate([0,0,-10])
 
     return mammaNode
 }
