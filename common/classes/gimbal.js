@@ -24,9 +24,7 @@ class Gimbal{
 
 
     frameCalculation(){
-
         let tmp1 = glMatrix.mat4.create()
-        //let tmp2 = glMatrix.mat4.create()
         let rotX = glMatrix.mat4.fromXRotation(glMatrix.mat4.create(),this.alpha)
         let rotY = glMatrix.mat4.fromYRotation(glMatrix.mat4.create(),this.beta)
         let rotZ = glMatrix.mat4.fromZRotation(glMatrix.mat4.create(),this.gamma)
@@ -66,102 +64,14 @@ class Gimbal{
         console.log(this.up[0],",",this.up[1],",",this.up[2])
         console.log(this.front[0],",",this.front[1],",",this.front[2])
     }
-    /*axisCalculation(){
-        let tmpRight = glMatrix.vec3.fromValues(1,0,0)
-        let tmpUp = glMatrix.vec3.fromValues(0,1,0)
-        let tmpFront = glMatrix.vec3.fromValues(0,0,1)
-        let tmpOrigin = glMatrix.vec3.create()
 
-        switch(this.type) {
-            case 0://XYZ
-                glMatrix.vec3.rotateX(tmpRight,tmpRight,tmpOrigin,this.beta)
-                glMatrix.vec3.rotateX(tmpRight,tmpRight,tmpOrigin,this.gamma)
-                
+    setAlpha(alpha) { this.alpha = alpha % (Math.PI*2) }
+    setBeta(beta) { this.beta = beta % (Math.PI*2) }
+    setGamma(gamma) { this.gamma = gamma % (Math.PI*2) }
 
-
-
-
-
-
-
-
-            case 1://XZY
-                glMatrix.vec3.rotateX(tmpRight,tmpRight,tmpOrigin,this.alpha)
-
-                glMatrix.vec3.rotateX(tmpFront,tmpFront,tmpOrigin,this.alpha)
-                glMatrix.vec3.rotateZ(tmpFront,tmpFront,tmpOrigin,this.gamma)
-
-                glMatrix.vec3.rotateX(tmpUp,tmpUp,tmpOrigin,this.alpha)
-                glMatrix.vec3.rotateZ(tmpUp,tmpUp,tmpOrigin,this.gamma)
-                glMatrix.vec3.rotateY(tmpUp,tmpUp,tmpOrigin,this.beta)
-                break
-            case 2://YXZ
-                glMatrix.vec3.rotateY(tmpUp,tmpUp,tmpOrigin,this.beta)
-
-                glMatrix.vec3.rotateY(tmpRight,tmpRight,tmpOrigin,this.beta)
-                glMatrix.vec3.rotateX(tmpRight,tmpRight,tmpOrigin,this.alpha)
-
-                break
-            case 3://YZX
-                glMatrix.vec3.rotateY(tmpUp,tmpUp,tmpOrigin,this.beta)
-
-                glMatrix.vec3.rotateY(tmpFront,tmpFront,tmpOrigin,this.beta)
-                glMatrix.vec3.rotateZ(tmpFront,tmpFront,tmpOrigin,this.gamma)
-
-                glMatrix.vec4.rotateY(tmpRight,tmpRight,tmpOrigin,this.beta)
-                glMatrix.vec4.rotateZ(tmpRight,tmpRight,tmpOrigin,this.gamma)
-                glMatrix.vec4.rotateX(tmpRight,tmpRight,tmpOrigin,this.alpha)
-                break
-            case 4://ZXY
-                glMatrix.vec3.rotateZ(tmpFront,tmpFront,tmpOrigin,this.gamma)
-
-                glMatrix.vec3.rotateZ(tmpRight,tmpRight,tmpOrigin,this.gamma)
-                glMatrix.vec3.rotateX(tmpRight,tmpRight,tmpOrigin,this.alpha)
-
-                glMatrix.vec3.rotateZ(tmpUp,tmpUp,tmpOrigin,this.gamma)
-                glMatrix.vec3.rotateX(tmpUp,tmpUp,tmpOrigin,this.alpha)
-                glMatrix.vec3.rotateY(tmpUp,tmpUp,tmpOrigin,this.beta)
-                break
-            case 5://ZYX
-                glMatrix.vec3.rotateZ(tmpFront,tmpFront,tmpOrigin,this.gamma)
-
-                glMatrix.vec3.rotateX(tmpUp,tmpUp,tmpOrigin,this.alpha)
-                glMatrix.vec3.rotateY(tmpUp,tmpUp,tmpOrigin,this.beta)
-                break
-            default:
-
-        }
-
-        this.right = tmpRight
-        this.up = tmpUp
-        this.front = tmpFront
-    }         */
-
-
-    setAlpha(alpha){
-        this.alpha = alpha % (Math.PI*2)
-    }
-    setBeta(beta){
-        this.beta = beta % (Math.PI*2)
-    }
-    setGamma(gamma){
-        this.gamma = gamma % (Math.PI*2)
-    }
-
-    addAlpha(alpha){
-        this.alpha+=alpha
-        this.alpha %= (Math.PI*2)
-    }
-
-    addBeta(beta){
-        this.beta+=beta
-        this.beta %= (Math.PI*2)
-    }
-
-    addGamma(gamma){
-        this.gamma+=gamma
-        this.beta %= (Math.PI*2)
-    }
+    addAlpha(alpha) { this.alpha = (this.alpha + alpha) % (Math.PI*2) }
+    addBeta(beta) { this.beta = (this.beta + beta) % (Math.PI*2) }
+    addGamma(gamma){ this.gamma = (this.gamma + gamma) % (Math.PI*2) }
 
 
 
