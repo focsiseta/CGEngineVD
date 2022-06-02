@@ -9,7 +9,6 @@
 *   this.indexs     : Uint16Array gl.UNSIGNED_SHORT
 * */
 
-
 class sceneElement {
     constructor(name = "Default_element"){
         this.name = name
@@ -60,6 +59,74 @@ class sceneElement {
     }
 
 }
+class Drawable extends sceneElement{
+
+    constructor(glContext, name = "Default_element",material = null,shape = null) {
+        super(name)
+        this.order = 0
+        this.shape = shape
+        this.material = material
+        this.context = glContext
+        this.createObject()
+    }
+
+    //this method is for keeping normal consistency in the shaders. If we have to draw an object with normals, we also need the inverse transposed transf matrix
+    getInverseTranspose(){
+        let tmp = glMatrix.mat4.create()
+        glMatrix.mat4.transpose(tmp,glMatrix.mat4.invert(tmp,this.getTransformation()))
+        return tmp
+    }
+
+    drawObject(shader){
+        let context = this.context
+
+        context.bindBuffer(context.ARRAY_BUFFER,this.vBuffer)
+        context.enableVertexAttribArray(shader['aPosition'])
+        context.vertexAttribPointer(shader['aPosition'],3,context.FLOAT,false,0,0)
+
+        context.bindBuffer(context.ARRAY_BUFFER,this.nBuffer)
+        context.enableVertexAttribArray(shader['aNormal'])
+        context.vertexAttribPointer(shader['aNormal'],3,context.FLOAT,false,0,0)
+
+        context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,this.iBuffer)
+        context.uniformMatrix4fv(shader['uM'],false,this.getFrame())
+
+        context.uniformMatrix4fv(shader['uInvTransGeoMatrix'],false,this.getInverseTranspose())
+
+        shader.setVectorUniform('uMatDiffuseColor',this.material.getDiffuse())
+        shader.setVectorUniform('uMatAmbientColor',this.material.getAmbient())
+        shader.setVectorUniform('uMatSpecularColor',this.material.getSpecular())
+
+        context.drawElements(context[this.shape.drawingType],this.shape.indices.length,context.UNSIGNED_SHORT,0)
+        context.disableVertexAttribArray(shader['aPosition'])
+        context.disableVertexAttribArray(shader['aNormal'])
+        context.bindBuffer(context.ARRAY_BUFFER,null)
+        context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,null)
+    }
+    createObject(){
+
+        let context= this.context
+
+        this.vBuffer = context.createBuffer()
+        context.bindBuffer(context.ARRAY_BUFFER,this.vBuffer)
+        context.bufferData(context.ARRAY_BUFFER,this.shape.vertices,context.STATIC_DRAW)
+        context.bindBuffer(context.ARRAY_BUFFER,null)
+        this.nBuffer = context.createBuffer()
+        context.bindBuffer(context.ARRAY_BUFFER,this.nBuffer)
+        context.bufferData(context.ARRAY_BUFFER,this.shape.normals,context.STATIC_DRAW)
+        context.bindBuffer(context.ARRAY_BUFFER,null)
+        this.iBuffer = context.createBuffer()
+        context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,this.iBuffer)
+        context.bufferData(context.ELEMENT_ARRAY_BUFFER,this.shape.indices,context.STATIC_DRAW)
+        context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,null)
+    }
+
+    setOrder(order){
+        this.order = order
+    }
+
+}
+
 
 class sceneNode {
     // Drawable , sceneNode[]
@@ -136,70 +203,3 @@ class sceneNode {
 
 }
 
-class Drawable extends sceneElement{
-
-    constructor(glContext, name = "Default_element",material = null,shape = null) {
-        super(name)
-        this.order = 0
-        this.shape = shape
-        this.material = material
-        this.context = glContext
-        this.createObject()
-    }
-
-    //this method is for keeping normal consistency in the shaders. If we have to draw an object with normals, we also need the inverse transposed transf matrix
-    getInverseTranspose(){
-        let tmp = glMatrix.mat4.create()
-        glMatrix.mat4.transpose(tmp,glMatrix.mat4.invert(tmp,this.getTransformation()))
-        return tmp
-    }
-
-    drawObject(shader){
-        let context = this.context
-
-        context.bindBuffer(context.ARRAY_BUFFER,this.vBuffer)
-        context.enableVertexAttribArray(shader['aPosition'])
-        context.vertexAttribPointer(shader['aPosition'],3,context.FLOAT,false,0,0)
-
-        context.bindBuffer(context.ARRAY_BUFFER,this.nBuffer)
-        context.enableVertexAttribArray(shader['aNormal'])
-        context.vertexAttribPointer(shader['aNormal'],3,context.FLOAT,false,0,0)
-
-        context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,this.iBuffer)
-        context.uniformMatrix4fv(shader['uM'],false,this.getFrame())
-
-        context.uniformMatrix4fv(shader['uInvTransGeoMatrix'],false,this.getInverseTranspose())
-
-        shader.setVectorUniform('uMatDiffuseColor',this.material.getDiffuse())
-        shader.setVectorUniform('uMatAmbientColor',this.material.getAmbient())
-        shader.setVectorUniform('uMatSpecularColor',this.material.getSpecular())
-
-        context.drawElements(context[this.shape.drawingType],this.shape.indices.length,context.UNSIGNED_SHORT,0)
-        context.disableVertexAttribArray(shader['aPosition'])
-        context.disableVertexAttribArray(shader['aNormal'])
-        context.bindBuffer(context.ARRAY_BUFFER,null)
-        context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,null)
-    }
-    createObject(){
-
-        let context= this.context
-
-        this.vBuffer = context.createBuffer()
-        context.bindBuffer(context.ARRAY_BUFFER,this.vBuffer)
-        context.bufferData(context.ARRAY_BUFFER,this.shape.vertices,context.STATIC_DRAW)
-        context.bindBuffer(context.ARRAY_BUFFER,null)
-        this.nBuffer = context.createBuffer()
-        context.bindBuffer(context.ARRAY_BUFFER,this.nBuffer)
-        context.bufferData(context.ARRAY_BUFFER,this.shape.normals,context.STATIC_DRAW)
-        context.bindBuffer(context.ARRAY_BUFFER,null)
-        this.iBuffer = context.createBuffer()
-        context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,this.iBuffer)
-        context.bufferData(context.ELEMENT_ARRAY_BUFFER,this.shape.indices,context.STATIC_DRAW)
-        context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,null)
-    }
-
-    setOrder(order){
-        this.order = order
-    }
-
-}

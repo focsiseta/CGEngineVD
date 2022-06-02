@@ -70,78 +70,40 @@ class Camera extends sceneElement{
         flag per invertire  vorrebbe dire che dopo una certo angolo di rotazione Z dovremmo cambiare il verso e questo
         puo' non essere sempre la soluzione piu' corretta
         */
-        //This gimbals af
-        if(inputHandler.getKeyStatus('w') === true){
+
+        /*funzione ausiliaria per mantenere il codice pulito: esegue il corpo degli if nei casi della traslazione
+        a,b,c sono gli elementi da estrarre dalla matrice nelle operazioni, flag se va invertito il segno della velocità*/
+        let translationOps = (a,b,c,flag) => {
             let tmp = glMatrix.mat4.create()
             glMatrix.mat4.invert(tmp,this.getViewMatrix())
-            let vector = glMatrix.vec3.fromValues(tmp[8],tmp[9],tmp[10])
-            glMatrix.vec3.scale(vector,vector,-this.speed)
-
-            //let vector = [ -1*(tmp[8] + gradToRad(1) * 0.00003) , -1*(tmp[9] + gradToRad(1) * 0.00003) , -1*(tmp[10] + gradToRad(1) * 0.00003)]
+            let vector = glMatrix.vec3.fromValues(tmp[a],tmp[b],tmp[c])
+            glMatrix.vec3.scale(vector,vector,flag?-this.speed:this.speed)
 
             this.translate(vector)
-            /*let tmp = glMatrix.vec3.create()
-            glMatrix.vec3.scale(tmp, this.gimbal.front, -0.3)
-            this.translate(tmp)*/
         }
 
-        if(inputHandler.getKeyStatus('s') === true) {
+        if(inputHandler.getKeyStatus('w') === true) {translationOps(8,9,10, true)}
+        if(inputHandler.getKeyStatus('s') === true) {translationOps(8,9,10,false)}
+        if(inputHandler.getKeyStatus('a') === true) {translationOps(0,1,2,  true)}
+        if(inputHandler.getKeyStatus('d') === true) {translationOps(0,1,2, false)}
 
-            let tmp = glMatrix.mat4.create()
-            glMatrix.mat4.invert(tmp,this.getViewMatrix())
-            let vector = glMatrix.vec3.fromValues(tmp[8],tmp[9],tmp[10])
-            glMatrix.vec3.scale(vector,vector,this.speed)
+        if(inputHandler.getKeyStatus('i') === true){this.rotateX(gradToRad( 0.5))}
+        if(inputHandler.getKeyStatus('k') === true){this.rotateX(gradToRad(-0.5))}
 
-            this.translate(vector)
+        if(inputHandler.getKeyStatus('l') === true){this.rotateY(gradToRad(-0.5))}
+        if(inputHandler.getKeyStatus('j') === true){this.rotateY(gradToRad( 0.5))}
 
-        }
-        if(inputHandler.getKeyStatus('u') === true){
+        if(inputHandler.getKeyStatus('n') === true){this.rotateZ(gradToRad( 0.5))}
+        if(inputHandler.getKeyStatus('m') === true){this.rotateZ(gradToRad(-0.5))}
+
+        /*if(inputHandler.getKeyStatus('u') === true){
             this.translate([0,0.05,0])
-        }
-        if(inputHandler.getKeyStatus('h') === true){
+        }*/
+        /*if(inputHandler.getKeyStatus('h') === true){
             this.translate([0,-0.05,0])
-        }
-        if(inputHandler.getKeyStatus('a') === true){
-            let tmp = glMatrix.mat4.create()
-            glMatrix.mat4.invert(tmp,this.getViewMatrix())
-            let vector = glMatrix.vec3.fromValues(tmp[0],tmp[1],tmp[2])
-            glMatrix.vec3.scale(vector,vector,-this.speed)
-
-            this.translate(vector)
-
-        }
-        if(inputHandler.getKeyStatus('d') === true){
-
-            let tmp = glMatrix.mat4.create()
-            glMatrix.mat4.invert(tmp,this.getViewMatrix())
-            let vector = glMatrix.vec3.fromValues(tmp[0],tmp[1],tmp[2])
-            glMatrix.vec3.scale(vector,vector,this.speed)
-            this.translate(vector)
+        }*/
 
 
-        }
-
-
-
-        if(inputHandler.getKeyStatus('i') === true){
-            this.rotateX(gradToRad(0.5))
-        }
-        if(inputHandler.getKeyStatus('k') === true){
-            this.rotateX(gradToRad(-0.5))
-        }
-        if(inputHandler.getKeyStatus('l') === true){
-            this.rotateY(gradToRad(-0.5))
-        }
-        if(inputHandler.getKeyStatus('j') === true){
-            this.rotateY(gradToRad(0.5))
-        }
-        if(inputHandler.getKeyStatus('n') === true){
-            this.rotateZ(gradToRad(0.5))
-        }
-
-        if(inputHandler.getKeyStatus('m') === true){
-            this.rotateZ(gradToRad(-0.5))
-        }
 
         if(inputHandler.getKeyStatus('p') === true){
             this.getCameraPosition()
