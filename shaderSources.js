@@ -119,7 +119,8 @@ const vsShaderBaseline  = `
         attribute vec3 aPosition;
         //normals
         attribute vec3 aNormal;
-        //TODO Texture
+        //texture
+        attribute vec2 aTextureCoord;
         
         //viewMatrix
         uniform mat4 viewMatrix;
@@ -134,6 +135,8 @@ const vsShaderBaseline  = `
         varying vec3 vPositionW;
         //exiting normal (which needs to be corrected by uInvTransGeoMatrix)
         varying vec3 vNormal;
+        //interpol. texture
+         varying highp vec2 vTexCoord;
         
         void main(void){
             //Point in world space just in case we need it
@@ -143,11 +146,10 @@ const vsShaderBaseline  = `
             
             //Sending correct normal to fragment shader
             vNormal = (uInvTransGeoMatrix * vec4(aNormal,1.0)).xyz;
+            vTexCoord = aTextureCoord;
             
         }
         `
-
-
 const fsShaderBase  = `
         precision highp float;
         
@@ -157,6 +159,8 @@ const fsShaderBase  = `
         //exiting normal (which needs to be corrected by uInvTransGeoMatrix)
         //Corrected and interpolated normal
         varying vec3 vNormal;
+        //Interpolated tex coordinates
+         varying highp vec2 vTexCoord;
         
         
         //Camera position
@@ -188,6 +192,8 @@ const fsShaderBase  = `
         uniform vec3 uMatAmbientColor;  //Colore del materiale in scarsa luminosita'
         uniform vec3 uMatSpecularColor; //Colore della riflessione della luce riflessa dall'oggetto
         
+        uniform sampler2D uSampler; // Texture
+        
         //33
         //Luke skywalker
         
@@ -214,7 +220,7 @@ const fsShaderBase  = `
                 finalColor += CalcDirectionalLight(sun[i],uEyePosition,vNormal);
 
             }
-            gl_FragColor = vec4(finalColor,1.0);
+            gl_FragColor = texture2D(uSampler,vTexCoord);
         
         }
         

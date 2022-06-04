@@ -88,6 +88,10 @@ class Drawable extends sceneElement{
         context.enableVertexAttribArray(shader['aNormal'])
         context.vertexAttribPointer(shader['aNormal'],3,context.FLOAT,false,0,0)
 
+        context.bindBuffer(context.ARRAY_BUFFER,this.shape.tBuffer)
+        context.enableVertexAttribArray(shader['aTextureCoord'])
+        context.vertexAttribPointer(shader['aTextureCoord'],2,context.FLOAT,false,0,0)
+
         context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,this.iBuffer)
         context.uniformMatrix4fv(shader['uM'],false,this.getFrame())
 
@@ -100,6 +104,7 @@ class Drawable extends sceneElement{
         context.drawElements(context[this.shape.drawingType],this.shape.indices.length,context.UNSIGNED_SHORT,0)
         context.disableVertexAttribArray(shader['aPosition'])
         context.disableVertexAttribArray(shader['aNormal'])
+        context.disableVertexAttribArray(shader['aTextureCoord'])
         context.bindBuffer(context.ARRAY_BUFFER,null)
         context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,null)
     }

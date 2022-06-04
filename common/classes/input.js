@@ -14,8 +14,4 @@ class Input{
     getKeyStatus(key = 'e'){
         return this.keys[key]
     }
-
-
-
-
 }

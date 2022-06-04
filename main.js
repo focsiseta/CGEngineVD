@@ -36,39 +36,69 @@ function createScene(){
 
     DirectionalLight.bindLights(shaders)
     DirectionalLight.loadLights(shaders)
-    mamma = new sceneElement("mamma")
-    var mammaNode = new sceneNode(mamma,[])
-
+    element = new sceneElement("mamma")
+    var node = new sceneNode(element,[])
+    /*
     var crate = new Drawable(shaders.getContext(),"crate",piros, shapeCrate)
     var cube = new Drawable(shaders.getContext(), "cube", piros, shapeCube)
-    var knife = new Drawable(shaders.getContext(),"knife", piros, shapeKnife)
-    var sphere = new Drawable(shaders.getContext(),"sphere", piros, shapeSphere)
+    var knife = new Drawable(shaders.getContext(),"knife", piros, shapeCrate)
+    var sphere = new Drawable(shaders.getContext(),"sphere", piros, shapeCube)
+    */
 
-    crate.scale([1.5,1.5,1.5])
-    cube.scale([1.5,1.5,1.5])
-    cube.translate([0,6,0])
 
-    var node = new sceneNode(crate,[])
-    crate.translate([0.0,-6.0,0.0])
+    var image1 = new Image()
+    var texture1
+    image1.addEventListener('load',function(){
+        gl.activeTexture(gl.TEXTURE0)
+        texture1 = gl.createTexture()
+        gl.bindTexture(gl.TEXTURE_2D,texture1)
+        gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA ,gl.RGBA,gl.UNSIGNED_BYTE,image1)
+        gl.generateMipmap(gl.TEXTURE_2D)
+        gl.bindTexture(gl.TEXTURE_2D,null)
+        console.log(texture1)
+    })
+    image1.src = "https://webglfundamentals.org/webgl/resources/f-texture-pixel-coords.png"
 
-    sphere.translate([-6,0,0])
-    sphere.scale([.75,.75,.75])
 
-    knife.scale([3,3,3])
+    var image2 = new Image()
+    image2.src = "common/textures/textureBox.png"
+    var texture2
+    image2.addEventListener('load',function(){
+        gl.activeTexture(gl.TEXTURE1)
+        texture2 = gl.createTexture()
+        gl.bindTexture(gl.TEXTURE_2D,texture1)
+        gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,image2)
+        gl.generateMipmap(gl.TEXTURE_2D)
+        gl.bindTexture(gl.TEXTURE_2D,null)
+        console.log(texture2)
+    })
+    shapeCube.texCoord = new Float32Array(96)
+    for(var i in shapeCube.texCoord){
+        shapeCube.texCoord[i] = 0.5
+    }
+    shapeCube.tBuffer = gl.createBuffer()
+    gl.bindBuffer(gl.ARRAY_BUFFER,shapeCube.tBuffer)
+    gl.bufferData(gl.ARRAY_BUFFER,shapeCube.texCoord,gl.STATIC_DRAW)
+    gl.bindBuffer(gl.ARRAY_BUFFER,null)
 
-    var node2 = new sceneNode(cube, [])
-    var node3 = new sceneNode(knife, [])
-    var node4 = new sceneNode(sphere,[])
 
-    mammaNode.addFiglio(node)
-    mammaNode.addFiglio(node2)
-    mammaNode.addFiglio(node3)
-    mammaNode.addFiglio(node4)
+    var cubeArray = []
+    for(let i = 0; i < 10;i++){
+        cubeArray.push(new Drawable(shaders.getContext(),"cube_"+i,piros,shapeCube))
+        cubeArray[i].translate([-5,0,0])
+        cubeArray[i].translate([0,0,-i*5])
+        node.addFiglio(new sceneNode(cubeArray[i],[]))
+    }
 
-    //mamma.rotateX(Math.PI/2)
-    mamma.translate([0,0,-10])
-
-    return mammaNode
+    var crateArray = []
+    for(let i = 0; i < 10;i++){
+        crateArray.push(new Drawable(shaders.getContext(),"cube_"+i,piros,shapeCube))
+        crateArray[i].translate([5,0,0])
+        crateArray[i].translate([0,0,-i*5])
+        node.addFiglio(new sceneNode(crateArray[i],[]))
+    }
+    //gl.bindTexture(gl.TEXTURE_2D,texture1)
+    return node
 }
 
 yo = createScene()
@@ -94,7 +124,7 @@ function drawScene(){
 */
 
 
-    //yo.element.rotateY(0.003)
+    yo.element.rotateY(0.003)
     //console.log(inputHandler.getKeyStatus('e'))
     //cumera.rotateZ(0.01)
     //cumera.rotateX(0.001)
@@ -105,6 +135,7 @@ function drawScene(){
 
 
     yo.calcSceneDraw(shaders.getContext(),shaders)
+    //yo.redrawScene(shaders.getContext(),shaders)
     window.requestAnimationFrame(drawScene)
 }
 cumera = setup()
