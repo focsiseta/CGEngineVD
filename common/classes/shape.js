@@ -5,6 +5,10 @@ class Shape{
         this.vertices = new Float32Array(vertexArray)
         this.indices = new Uint16Array(indexArray)
         this.normals = normalArray == null ? ComputeNormals(this.vertices,this.indices) : new Float32Array(normalArray)
+
+        this.vBuffer = null
+        this.iBuffer = null
+        this.nBuffer = null
     }
 
 
@@ -29,3 +33,5 @@ const supercube = new Shape([
     2, 3, 6, 6, 3, 7,  // top
     4, 5, 0, 0, 5, 1   // bottom
 ])
+
+

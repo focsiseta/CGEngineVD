@@ -78,3 +78,18 @@ const cube={
 
 
 const shapeCube = new Shape(cube.vertices[0].values, cube.connectivity[0].indices, cube.vertices[1].values)
+//CREAZIONE BUFFER, DA IMPLEMENTARE NEL COSTRUTTORE DI SHAPE
+shapeCube.vBuffer = gl.createBuffer()
+gl.bindBuffer(gl.ARRAY_BUFFER,shapeCube.vBuffer)
+gl.bufferData(gl.ARRAY_BUFFER,shapeCube.vertices,gl.STATIC_DRAW)
+gl.bindBuffer(gl.ARRAY_BUFFER,null)
+
+shapeCube.nBuffer = gl.createBuffer()
+gl.bindBuffer(gl.ARRAY_BUFFER,shapeCube.nBuffer)
+gl.bufferData(gl.ARRAY_BUFFER,shapeCube.normals,gl.STATIC_DRAW)
+gl.bindBuffer(gl.ARRAY_BUFFER,null)
+
+shapeCube.iBuffer = gl.createBuffer()
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,shapeCube.iBuffer)
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,shapeCube.indices,gl.STATIC_DRAW)
+gl.bindBuffer(gl.ARRAY_BUFFER,null)

@@ -67,7 +67,7 @@ function createScene(){
         gl.activeTexture(gl.TEXTURE1)
         texture2 = gl.createTexture()
         gl.bindTexture(gl.TEXTURE_2D,texture1)
-        gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,image2)
+        gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,image2)
         gl.generateMipmap(gl.TEXTURE_2D)
         gl.bindTexture(gl.TEXTURE_2D,null)
         console.log(texture2)
@@ -83,21 +83,29 @@ function createScene(){
 
 
     var cubeArray = []
-    for(let i = 0; i < 10;i++){
+    for(let i = 0; i < 20;i++){
         cubeArray.push(new Drawable(shaders.getContext(),"cube_"+i,piros,shapeCube))
         cubeArray[i].translate([-5,0,0])
         cubeArray[i].translate([0,0,-i*5])
         node.addFiglio(new sceneNode(cubeArray[i],[]))
     }
+    cubeArray = []
+    for(let i = 0; i < 20;i++){
+        cubeArray.push(new Drawable(shaders.getContext(),"cube_"+i,piros,shapeCube))
+        cubeArray[i].translate([0,0,-i*5])
+        node.addFiglio(new sceneNode(cubeArray[i],[]))
+    }
 
     var crateArray = []
-    for(let i = 0; i < 10;i++){
+    for(let i = 0; i < 20;i++){
         crateArray.push(new Drawable(shaders.getContext(),"cube_"+i,piros,shapeCube))
         crateArray[i].translate([5,0,0])
         crateArray[i].translate([0,0,-i*5])
         node.addFiglio(new sceneNode(crateArray[i],[]))
     }
     //gl.bindTexture(gl.TEXTURE_2D,texture1)
+
+    sceneNode.recCalcScene(node,identity())
     return node
 }
 
@@ -108,9 +116,6 @@ var countero = 0
 var flaggo = true
 
 function drawScene(){
-
-
-
     /*if(countero >70){
         countero=0
         flaggo=!flaggo
@@ -123,48 +128,23 @@ function drawScene(){
     countero++
 */
 
+    //yo.element.rotateY(0.003)
+    //yo.calcScene()
 
-    yo.element.rotateY(0.003)
+
     //console.log(inputHandler.getKeyStatus('e'))
     //cumera.rotateZ(0.01)
     //cumera.rotateX(0.001)
-    cumera.processInput(inputHandler)
 
+    cumera.processInput(inputHandler)
     shaders.setMatrixUniform('viewMatrix',cumera.getViewMatrix())
     shaders.setVectorUniform('uEyePosition',cumera.getCameraPosition())
 
+    sceneNode.recRedrawScene(yo,shaders.getContext(),shaders)
 
-    yo.calcSceneDraw(shaders.getContext(),shaders)
-    //yo.redrawScene(shaders.getContext(),shaders)
+    //sceneNode.recCalcSceneDraw(yo,identity(),shaders.getContext(),shaders)
+    //sceneNode.recCalcSceneDraw(yo,identity(),shaders.getContext(),shaders)
     window.requestAnimationFrame(drawScene)
 }
 cumera = setup()
 drawScene()
-/* Input.addCallback((event)=>{
-     if(event.key === 'a' || event.key === 'A'){
-         cube.rotateY(0.1)
-     }
-     if(event.key == 'd' || event.key == 'D'){
-         cube.rotateY(-0.1)
-     }
-     if(event.key == 'w' || event.key == 'W'){
-         cube.translate([0,0,-0.1])
-     }
-     if(event.key == 's' || event.key == 'S'){
-         cube.translate([0,0,0.1])
-     }
- },"keydown")
- Input.addCallback((event)=>{
-     if(event.key === 'a' || event.key === 'A'){
-         cube.rotateY(0.1)
-     }
-     if(event.key == 'd' || event.key == 'D'){
-         cube.rotateY(-0.1)
-     }
-     if(event.key == 'w' || event.key == 'W'){
-         cube.translate([0,0,-0.1])
-     }
-     if(event.key == 's' || event.key == 'S'){
-         cube.translate([0,0,0.1])
-     }
- },"keyup")*/

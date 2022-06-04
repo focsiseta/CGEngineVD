@@ -17,6 +17,12 @@ class sceneElement {
         this.translationMatrix = glMatrix.mat4.create()
         //Father frame
         this.fMatrix = glMatrix.mat4.create()
+        //Full transformation frame
+        this.tMatrix = glMatrix.mat4.create()
+        //Full transformation frame inverted and then transposed
+        this.inverseTransposeMatrix = glMatrix.mat4.create()
+        //Full transformation frame multiplied by father frame
+        this.finalFrame = glMatrix.mat4.create()
 
     }
     rotateX(angle){
@@ -58,6 +64,16 @@ class sceneElement {
         glMatrix.mat4.copy(this.fMatrix,frame)
     }
 
+    updateStuff(){
+        this.tMatrix = this.getTransformation()
+
+        this.finalFrame = this.getFrame()
+
+        let tmp = glMatrix.mat4.create()
+        glMatrix.mat4.transpose(tmp,glMatrix.mat4.invert(tmp,this.getTransformation()))
+        this.inverseTransposeMatrix = tmp
+    }
+
 }
 class Drawable extends sceneElement{
 
@@ -67,7 +83,8 @@ class Drawable extends sceneElement{
         this.shape = shape
         this.material = material
         this.context = glContext
-        this.createObject()
+      //NON SERVE PIU', E' LA SHAPE AD ISTANZIARE I BUFFER NELLA GPU
+        //this.createObject()
     }
 
     //this method is for keeping normal consistency in the shaders. If we have to draw an object with normals, we also need the inverse transposed transf matrix
@@ -78,13 +95,16 @@ class Drawable extends sceneElement{
     }
 
     drawObject(shader){
+//ADESSO OGNI DRAWABLE FA IL BINDING DEI BUFFER DELLA SHAPE, NON NE CREA PIU' DI NUOVI
         let context = this.context
 
-        context.bindBuffer(context.ARRAY_BUFFER,this.vBuffer)
+        //context.bindBuffer(context.ARRAY_BUFFER,this.vBuffer)
+        context.bindBuffer(context.ARRAY_BUFFER,this.shape.vBuffer)
         context.enableVertexAttribArray(shader['aPosition'])
         context.vertexAttribPointer(shader['aPosition'],3,context.FLOAT,false,0,0)
 
-        context.bindBuffer(context.ARRAY_BUFFER,this.nBuffer)
+        //context.bindBuffer(context.ARRAY_BUFFER,this.nBuffer)
+        context.bindBuffer(context.ARRAY_BUFFER,this.shape.nBuffer)
         context.enableVertexAttribArray(shader['aNormal'])
         context.vertexAttribPointer(shader['aNormal'],3,context.FLOAT,false,0,0)
 
@@ -92,10 +112,11 @@ class Drawable extends sceneElement{
         context.enableVertexAttribArray(shader['aTextureCoord'])
         context.vertexAttribPointer(shader['aTextureCoord'],2,context.FLOAT,false,0,0)
 
-        context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,this.iBuffer)
-        context.uniformMatrix4fv(shader['uM'],false,this.getFrame())
+        //context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,this.iBuffer)
+        context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,this.shape.iBuffer)
+        context.uniformMatrix4fv(shader['uM'],false,this.finalFrame)
 
-        context.uniformMatrix4fv(shader['uInvTransGeoMatrix'],false,this.getInverseTranspose())
+        context.uniformMatrix4fv(shader['uInvTransGeoMatrix'],false,this.inverseTransposeMatrix)
 
         shader.setVectorUniform('uMatDiffuseColor',this.material.getDiffuse())
         shader.setVectorUniform('uMatAmbientColor',this.material.getAmbient())
@@ -109,7 +130,6 @@ class Drawable extends sceneElement{
         context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,null)
     }
     createObject(){
-
         let context= this.context
 
         this.vBuffer = context.createBuffer()
@@ -144,6 +164,7 @@ class sceneNode {
     getDrawable(){
         return this.element
     }
+
     addFiglio(element){
         this.figli.push(element)
     }
@@ -158,15 +179,20 @@ class sceneNode {
             return
         }
         sNode.element.setFatherFrame(acc)
+        sNode.element.updateStuff()
         sNode.figli.forEach((figlio) =>{
             sceneNode.recCalcScene(figlio,sNode.element.getFrame())
         })
 
     }
+//disegnare con la struttura array
+    static drawArray(array){
+        return
+    }
+
     calcSceneDraw(context,shader){ //useful when you want perpetual movement
         sceneNode.recCalcSceneDraw(this,glMatrix.mat4.create(),context,shader)
     }
-
 
     static recCalcSceneDraw(sNode,acc,context,shader){
         if(sNode.element == null){
@@ -186,25 +212,25 @@ class sceneNode {
             sceneNode.recCalcSceneDraw(figlio,sNode.element.getFrame(),context,shader)
         })
     }
+
     redrawScene(context,shader){
         sceneNode.recRedrawScene(this,context,shader)
     }
+
     static recRedrawScene(sNode,context,shader){
         if(sNode.element == null){
-            sNode.figli.forEach((figlio)=>{
-                sceneNode.recRedrawScene(figlio,context,shader)
+            sNode.figli.forEach((figlio)=> {
+                sceneNode.recRedrawScene(figlio, context, shader)
             })
             return
         }
 
-            if(sNode.element.drawObject != null)
-                sNode.element.drawObject(context,shader)
-            sNode.figli.forEach((figlio) =>{
-                if(sNode.element.drawObject != null)
-                    sNode.element.drawObject(context,shader)
-                sceneNode.recRedrawScene(figlio,context,shader)
-            })
-    }
+        if(sNode.element.drawObject != null)
+            sNode.element.drawObject(shader)
 
+        sNode.figli.forEach((figlio) => {
+            sceneNode.recRedrawScene(figlio, context, shader)
+        })
+    }
 }
 
