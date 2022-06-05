@@ -93,3 +93,6 @@ shapeCube.iBuffer = gl.createBuffer()
 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,shapeCube.iBuffer)
 gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,shapeCube.indices,gl.STATIC_DRAW)
 gl.bindBuffer(gl.ARRAY_BUFFER,null)
+
+
+

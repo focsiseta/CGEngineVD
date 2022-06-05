@@ -99,21 +99,22 @@ class Drawable extends sceneElement{
         let context = this.context
 
         //context.bindBuffer(context.ARRAY_BUFFER,this.vBuffer)
-        context.bindBuffer(context.ARRAY_BUFFER,this.shape.vBuffer)
-        context.enableVertexAttribArray(shader['aPosition'])
-        context.vertexAttribPointer(shader['aPosition'],3,context.FLOAT,false,0,0)
+        //context.bindBuffer(context.ARRAY_BUFFER,this.shape.vBuffer)
+        //context.enableVertexAttribArray(shader['aPosition'])
+        //context.vertexAttribPointer(shader['aPosition'],3,context.FLOAT,false,0,0)
 
-        //context.bindBuffer(context.ARRAY_BUFFER,this.nBuffer)
+        /*context.bindBuffer(context.ARRAY_BUFFER,this.nBuffer)
         context.bindBuffer(context.ARRAY_BUFFER,this.shape.nBuffer)
         context.enableVertexAttribArray(shader['aNormal'])
-        context.vertexAttribPointer(shader['aNormal'],3,context.FLOAT,false,0,0)
+        context.vertexAttribPointer(shader['aNormal'],3,context.FLOAT,false,0,0)*/
 
-        context.bindBuffer(context.ARRAY_BUFFER,this.shape.tBuffer)
+        /*context.bindBuffer(context.ARRAY_BUFFER,this.shape.tBuffer)
         context.enableVertexAttribArray(shader['aTextureCoord'])
-        context.vertexAttribPointer(shader['aTextureCoord'],2,context.FLOAT,false,0,0)
+        context.vertexAttribPointer(shader['aTextureCoord'],2,context.FLOAT,false,0,0)*/
 
         //context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,this.iBuffer)
-        context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,this.shape.iBuffer)
+
+        //context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,this.shape.iBuffer)
         context.uniformMatrix4fv(shader['uM'],false,this.finalFrame)
 
         context.uniformMatrix4fv(shader['uInvTransGeoMatrix'],false,this.inverseTransposeMatrix)
@@ -123,11 +124,11 @@ class Drawable extends sceneElement{
         shader.setVectorUniform('uMatSpecularColor',this.material.getSpecular())
 
         context.drawElements(context[this.shape.drawingType],this.shape.indices.length,context.UNSIGNED_SHORT,0)
-        context.disableVertexAttribArray(shader['aPosition'])
-        context.disableVertexAttribArray(shader['aNormal'])
-        context.disableVertexAttribArray(shader['aTextureCoord'])
-        context.bindBuffer(context.ARRAY_BUFFER,null)
-        context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,null)
+        //context.disableVertexAttribArray(shader['aPosition'])
+        //context.disableVertexAttribArray(shader['aNormal'])
+        //context.disableVertexAttribArray(shader['aTextureCoord'])
+        //context.bindBuffer(context.ARRAY_BUFFER,null)
+        //context.bindBuffer(context.ELEMENT_ARRAY_BUFFER,null)
     }
     createObject(){
         let context= this.context
@@ -171,7 +172,7 @@ class sceneNode {
     calcScene(){
         sceneNode.recCalcScene(this,identity())
     }
-    static recCalcScene(sNode,acc){
+    static recCalcScene(sNode,acc,array){
         if(sNode.element == null){
             sNode.figli.forEach((figlio)=>{
                 sceneNode.recCalcScene(figlio,acc)
@@ -180,14 +181,17 @@ class sceneNode {
         }
         sNode.element.setFatherFrame(acc)
         sNode.element.updateStuff()
+        if (sNode.element.drawObject!=null)
+            array.push(sNode.element)
         sNode.figli.forEach((figlio) =>{
-            sceneNode.recCalcScene(figlio,sNode.element.getFrame())
+            sceneNode.recCalcScene(figlio,sNode.element.getFrame(),array)
         })
 
     }
 //disegnare con la struttura array
-    static drawArray(array){
-        return
+    static drawArray(array,shader){
+        for (let key in array)
+            array[key].drawObject(shader)
     }
 
     calcSceneDraw(context,shader){ //useful when you want perpetual movement

@@ -11,6 +11,23 @@ function setup(){
 
     //Stupid shit
 
+//BINDING PER CUBO DI ATTRIBUTI POSIZIONE, NORMALII E INDICI
+    gl.enableVertexAttribArray(shaders['aPosition'])
+    gl.bindBuffer(gl.ARRAY_BUFFER,shapeCube.vBuffer)
+    gl.vertexAttribPointer(shaders['aPosition'],3,gl.FLOAT,false,0,0)
+    //gl.vertexAttribPointer(shaders['aPosition'],3,gl.FLOAT,false,0,0)
+
+    gl.enableVertexAttribArray(shaders['aNormal'])
+    gl.bindBuffer(gl.ARRAY_BUFFER,shapeCube.nBuffer)
+    gl.vertexAttribPointer(shaders['aNormal'],3,gl.FLOAT,false,0,0)
+
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,shapeCube.iBuffer)
+    //gl.vertexAttribPointer(shaders['aNormal'],3,gl.FLOAT,false,0,0)
+
+    //gl.enableVertexAttribArray(shaders['aTextureCoord'])
+    //gl.vertexAttribPointer(shaders['aTextureCoord'],2,gl.FLOAT,false,0,0)
+
+
     gl.enable(gl.CULL_FACE)
     gl.enable(gl.DEPTH_TEST)
     gl.clearColor(0.3,0.8,0.8,0.8)
@@ -70,46 +87,53 @@ function createScene(){
         gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,image2)
         gl.generateMipmap(gl.TEXTURE_2D)
         gl.bindTexture(gl.TEXTURE_2D,null)
-        console.log(texture2)
     })
+
     shapeCube.texCoord = new Float32Array(96)
     for(var i in shapeCube.texCoord){
         shapeCube.texCoord[i] = 0.5
     }
     shapeCube.tBuffer = gl.createBuffer()
+//BINDING DI ATTRIBUTO TEXTURE
+    gl.enableVertexAttribArray(shaders['aTextureCoord'])
     gl.bindBuffer(gl.ARRAY_BUFFER,shapeCube.tBuffer)
+    gl.vertexAttribPointer(shaders['aTextureCoord'],2,gl.FLOAT,false,0,0)
     gl.bufferData(gl.ARRAY_BUFFER,shapeCube.texCoord,gl.STATIC_DRAW)
     gl.bindBuffer(gl.ARRAY_BUFFER,null)
 
 
     var cubeArray = []
-    for(let i = 0; i < 20;i++){
+    for(let i = 0; i < 23;i++){
         cubeArray.push(new Drawable(shaders.getContext(),"cube_"+i,piros,shapeCube))
         cubeArray[i].translate([-5,0,0])
         cubeArray[i].translate([0,0,-i*5])
         node.addFiglio(new sceneNode(cubeArray[i],[]))
     }
     cubeArray = []
-    for(let i = 0; i < 20;i++){
+    for(let i = 0; i < 23;i++){
         cubeArray.push(new Drawable(shaders.getContext(),"cube_"+i,piros,shapeCube))
         cubeArray[i].translate([0,0,-i*5])
         node.addFiglio(new sceneNode(cubeArray[i],[]))
     }
 
     var crateArray = []
-    for(let i = 0; i < 20;i++){
+    for(let i = 0; i < 23;i++){
         crateArray.push(new Drawable(shaders.getContext(),"cube_"+i,piros,shapeCube))
         crateArray[i].translate([5,0,0])
         crateArray[i].translate([0,0,-i*5])
         node.addFiglio(new sceneNode(crateArray[i],[]))
     }
+
+
     //gl.bindTexture(gl.TEXTURE_2D,texture1)
 
-    sceneNode.recCalcScene(node,identity())
-    return node
-}
+    let array = []
 
-yo = createScene()
+    sceneNode.recCalcScene(node,identity(),array)
+    return ([node,array])
+}
+let yo,array
+[yo,array] = createScene()
 inputHandler = new Input()
 
 var countero = 0
@@ -140,8 +164,8 @@ function drawScene(){
     shaders.setMatrixUniform('viewMatrix',cumera.getViewMatrix())
     shaders.setVectorUniform('uEyePosition',cumera.getCameraPosition())
 
-    sceneNode.recRedrawScene(yo,shaders.getContext(),shaders)
-
+    //sceneNode.recRedrawScene(yo,shaders.getContext(),shaders)
+    sceneNode.drawArray(array,shaders)
     //sceneNode.recCalcSceneDraw(yo,identity(),shaders.getContext(),shaders)
     //sceneNode.recCalcSceneDraw(yo,identity(),shaders.getContext(),shaders)
     window.requestAnimationFrame(drawScene)
