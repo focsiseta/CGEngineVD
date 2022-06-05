@@ -12,6 +12,7 @@ function setup(){
     //Stupid shit
 
 //BINDING PER CUBO DI ATTRIBUTI POSIZIONE, NORMALII E INDICI
+// SETTO GLI UNIFORM DEL CUBO
     gl.enableVertexAttribArray(shaders['aPosition'])
     gl.bindBuffer(gl.ARRAY_BUFFER,shapeCube.vBuffer)
     gl.vertexAttribPointer(shaders['aPosition'],3,gl.FLOAT,false,0,0)
@@ -22,6 +23,10 @@ function setup(){
     gl.vertexAttribPointer(shaders['aNormal'],3,gl.FLOAT,false,0,0)
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,shapeCube.iBuffer)
+
+    shaders.setVectorUniform('uMatDiffuseColor',piros.getDiffuse())
+    shaders.setVectorUniform('uMatAmbientColor',piros.getAmbient())
+    shaders.setVectorUniform('uMatSpecularColor',piros.getSpecular())
     //gl.vertexAttribPointer(shaders['aNormal'],3,gl.FLOAT,false,0,0)
 
     //gl.enableVertexAttribArray(shaders['aTextureCoord'])
@@ -103,23 +108,37 @@ function createScene(){
 
 
     var cubeArray = []
-    for(let i = 0; i < 23;i++){
+    for(let i = 0; i < 30;i++){
         cubeArray.push(new Drawable(shaders.getContext(),"cube_"+i,piros,shapeCube))
         cubeArray[i].translate([-5,0,0])
         cubeArray[i].translate([0,0,-i*5])
         node.addFiglio(new sceneNode(cubeArray[i],[]))
     }
     cubeArray = []
-    for(let i = 0; i < 23;i++){
+    for(let i = 0; i < 25;i++){
         cubeArray.push(new Drawable(shaders.getContext(),"cube_"+i,piros,shapeCube))
         cubeArray[i].translate([0,0,-i*5])
         node.addFiglio(new sceneNode(cubeArray[i],[]))
     }
 
     var crateArray = []
-    for(let i = 0; i < 23;i++){
+    for(let i = 0; i < 25;i++){
         crateArray.push(new Drawable(shaders.getContext(),"cube_"+i,piros,shapeCube))
         crateArray[i].translate([5,0,0])
+        crateArray[i].translate([0,0,-i*5])
+        node.addFiglio(new sceneNode(crateArray[i],[]))
+    }
+    var crateArray = []
+    for(let i = 0; i < 25;i++){
+        crateArray.push(new Drawable(shaders.getContext(),"cube_"+i,piros,shapeCube))
+        crateArray[i].translate([10,0,0])
+        crateArray[i].translate([0,0,-i*5])
+        node.addFiglio(new sceneNode(crateArray[i],[]))
+    }
+    var crateArray = []
+    for(let i = 0; i < 25;i++){
+        crateArray.push(new Drawable(shaders.getContext(),"cube_"+i,piros,shapeCube))
+        crateArray[i].translate([-10,0,0])
         crateArray[i].translate([0,0,-i*5])
         node.addFiglio(new sceneNode(crateArray[i],[]))
     }
